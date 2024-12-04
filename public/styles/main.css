@@ -1,0 +1,11 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+html {
+  background-color: antiquewhite;
+}
+canvas {
+  max-width: 50vw;
+  max-height: 50vh;
+}
