@@ -1,12 +1,12 @@
 const ctx = document.getElementById('myChart').getContext('2d');
-const maxPoints = 10;
+const maxPoints = 15;
 const chart = new Chart(ctx, {
   type: 'line',
   data: {
     labels: [],
     datasets: [
       {
-        label: 'Dynamic Data',
+        label: 'currency price',
         data: [],
         borderColor: 'rgba(75, 192, 192, 1)',
       },
@@ -15,8 +15,18 @@ const chart = new Chart(ctx, {
   options: {
     responsive: true,
     scales: {
-      x: { title: { display: true, text: 'Time' } },
-      y: { title: { display: true, text: 'Value' } },
+      x: {
+        title: { display: true, text: 'Time' },
+      },
+      y: {
+        title: { display: true, text: 'USD' },
+        ticks: {
+          stepSize: 0.01,
+          callback: function (value) {
+            return value.toFixed(3);
+          },
+        },
+      },
     },
   },
 });
@@ -54,5 +64,7 @@ setInterval(async () => {
   } catch (e) {
     console.error('error on fetching data: ' + e);
   }
+  console.log(value);
+
   addPoint(now, value);
 }, 2000);
