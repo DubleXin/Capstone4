@@ -1,5 +1,8 @@
+import { globalDataController as dataController } from './app.js';
+
 const ctx = document.getElementById('myChart').getContext('2d');
-const maxPoints = 15;
+let maxPoints = 15;
+
 const chart = new Chart(ctx, {
   type: 'line',
   data: {
@@ -44,6 +47,18 @@ function addPoint(label, value) {
   chart.update();
 }
 
+function clearExcessData() {
+  const dataset = chart.data.datasets[0];
+
+  if (dataset.data.length > maxPoints) {
+    const excessCount = dataset.data.length - maxPoints;
+    chart.data.labels.splice(0, excessCount);
+    dataset.data.splice(0, excessCount);
+  }
+
+  chart.update();
+}
+
 setInterval(async () => {
   const now = new Date().toLocaleTimeString();
   let value = -1;
@@ -64,7 +79,15 @@ setInterval(async () => {
   } catch (e) {
     console.error('error on fetching data: ' + e);
   }
-  console.log(value);
 
   addPoint(now, value);
 }, 2000);
+
+$(document).ready(function () {
+  dataController.subscribeToDataUpdate('TextArea', true, (newMaxPoints) => {
+    const parsedValue = parseInt(newMaxPoints, 10);
+    if (!Number.isInteger(parsedValue) || parsedValue <= 0) return;
+    maxPoints = parsedValue;
+    clearExcessData();
+  });
+});
