@@ -8,5 +8,4 @@ export * as _textAreaController from './textAreaController.js';
 
 import { default as GlobalDataController } from './GlobalDataController.js';
 
-
 const globalDataController = new GlobalDataController();
